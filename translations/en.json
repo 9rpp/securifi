@@ -1,0 +1,26 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "A Securifi server has been configured previously"
+        },
+        "create_entry": {
+            "default": "Securifi server added"
+        },
+        "error": {
+            "cannot_connect": "Unable to connect to Securifi server",
+            "invalid_auth": "Authentication failure",
+            "unknown": "Unknown error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "host": "Host",
+                    "password": "Password",
+                    "port": "Port",
+                    "username": "Username"
+                }
+            }
+        }
+    },
+    "title": "Add a Securifi Server"
+}

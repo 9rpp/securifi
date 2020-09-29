@@ -1,0 +1,14 @@
+{
+  "domain": "securifi",
+  "name": "securifi",
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/securifi",
+  "requirements": ["websocket-client==0.57.0"],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": [
+    "@9rpp"
+  ]
+}
