@@ -151,29 +151,3 @@ class SecurifiSwitch(CoordinatorEntity, SwitchEntity):
     async def async_turn_off(self, **kwargs):
         self._switch.turn_off()
         await self.coordinator.async_request_refresh()
-
-
-##    async def async_update(self):
-##        """Fetch new state data for this light.
-##        This is the only method that should fetch new data for Home Assistant.
-##        """
-##        ws = create_connection("ws://192.168.1.101:7681/admin/third62")
-##        result = ws.recv()
-##        mii = "1234"
-##        cmd = "GetDeviceIndex"
-##        req = '{"MobileInternalIndex":"' + mii + '","CommandType":"'+ cmd +'", "ID":"' + self._devid + '", "Index":"1"}'
-##        ws.send(req)
-##        result = ws.recv()
-##        ws.close()
-##        if not result:
-##            raise Exception("invalid result from server")
-##        rsp = eval(result)
-##        if rsp['CommandType'] != cmd or rsp['MobileInternalIndex'] != mii:
-##            raise Exception("Request and response mismatches")
-##
-##        if rsp['Success'].lower() == "true":
-##            #_LOGGER.info("Securifi switch update() success " + str(self._devid) + "::" + str(rsp['Value']))
-##            self._state = True if rsp['Value'].lower() == "true" else False
-##        else:
-##            _LOGGER.error("Securifi switch update() failed")
-##

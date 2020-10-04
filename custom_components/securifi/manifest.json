@@ -1,8 +1,9 @@
 {
   "domain": "securifi",
-  "name": "securifi",
+  "name": "Securifi RESTful API",
   "config_flow": true,
-  "documentation": "https://www.home-assistant.io/integrations/securifi",
+  "documentation": "https://github.com/9rpp/securifi",
+  "issue_tracker": "https://github.com/9rpp/securifi/issues",
   "requirements": ["websocket-client==0.57.0"],
   "ssdp": [],
   "zeroconf": [],
