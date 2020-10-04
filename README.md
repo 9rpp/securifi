@@ -25,4 +25,5 @@ TODO - add screenshot
 
 #### References
 Securifi Websocket API Documentation: https://wiki.securifi.com/index.php/Websockets_Documentation#Updatedeviceindex
+
 Securifi Device List Documentation: https://wiki.securifi.com/index.php/Devicelist_Documentation
