@@ -2,10 +2,7 @@
 import asyncio
 
 import voluptuous as vol
-
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers import config_validation as cv
 from homeassistant.const import (
     ATTR_ID,
     ATTR_NAME,
@@ -13,6 +10,9 @@ from homeassistant.const import (
     CONF_PASSWORD,
     CONF_USERNAME,
 )
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
+
 from .const import DOMAIN
 
 # List of the platforms that we support.
@@ -21,7 +21,7 @@ PLATFORMS = ["switch"]
 HOST_CONFIG_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): cv.string,
-        vol.Optional(CONF_USERNAME, default='admin'): cv.string,
+        vol.Optional(CONF_USERNAME, default="admin"): cv.string,
         vol.Required(CONF_PASSWORD): cv.string,
     }
 )
@@ -33,6 +33,7 @@ CONFIG_SCHEMA = vol.All(
     ),
 )
 ##CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
+
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the securifi component."""
