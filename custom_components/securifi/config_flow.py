@@ -2,20 +2,24 @@
 
 
 import logging
-import voluptuous as vol
-import homeassistant.helpers.config_validation as cv
 
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant import config_entries, core, exceptions
-from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME, CONF_PORT
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, CONF_USERNAME
+
 from .const import DOMAIN  # pylint:disable=unused-import
 
 _LOGGER = logging.getLogger(__name__)
-DATA_SCHEMA = vol.Schema({
-    vol.Required(CONF_HOST): str,
-    vol.Optional(CONF_PORT, default=7681): int,
-    vol.Optional(CONF_USERNAME, default='admin'): str,
-    vol.Optional(CONF_PASSWORD): str
-})
+DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_HOST): str,
+        vol.Optional(CONF_PORT, default=7681): int,
+        vol.Optional(CONF_USERNAME, default="admin"): str,
+        vol.Optional(CONF_PASSWORD): str,
+    }
+)
+
 
 class PlaceholderHub:
     """Placeholder class to make tests pass.

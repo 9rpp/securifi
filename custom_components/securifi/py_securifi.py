@@ -1,19 +1,20 @@
 """An API Client to interact with Securifi Almond"""
-import time
 import json
 import logging
+import time
 
 from websocket import create_connection
 
 _LOGGER = logging.getLogger(__name__)
 
-#_LOGGER.setLevel(logging.DEBUG)
-#ch = logging.StreamHandler()
-#formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-#ch.setFormatter(formatter)
-#_LOGGER.addHandler(ch)
+# _LOGGER.setLevel(logging.DEBUG)
+# ch = logging.StreamHandler()
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# ch.setFormatter(formatter)
+# _LOGGER.addHandler(ch)
 
-class securifi_almond():
+
+class securifi_almond:
     DEFAULT_PORT = 7681
     DEFAULT_USER = "admin"
 
@@ -27,8 +28,12 @@ class securifi_almond():
         # Get initial list of switches
         sw_list = self.__get_switches()
         for sw in sw_list:
-            self._switches.append(self.switch(self._api_comm, str(sw), sw_list[sw]['name'], sw_list[sw]['state']))
-        #return self._switches
+            self._switches.append(
+                self.switch(
+                    self._api_comm, str(sw), sw_list[sw]["name"], sw_list[sw]["state"]
+                )
+            )
+        # return self._switches
 
     def __get_devlist(self):
         _LOGGER.debug("__get_devlist")
@@ -41,21 +46,25 @@ class securifi_almond():
         self._devlist = rsp
         return True
 
-
     # Queries devicelist and extract a list of switches
     def __get_switches(self):
         _LOGGER.debug("get_switches")
         self.__get_devlist()
         rsp = self._devlist
-        
+
         # Parse through rsp and grab only type 1 and 50 switches
         # get Data:FriendlyDeviceType, Data:Name, DeviceValues:2:Value
-        devices = {} 
-        for dev in rsp['Devices']:
-            dev_type = rsp['Devices'][dev]['Data']['Type']
+        devices = {}
+        for dev in rsp["Devices"]:
+            dev_type = rsp["Devices"][dev]["Data"]["Type"]
             if dev_type == "1" or dev_type == "50":
-                name = rsp['Devices'][dev]['Data']['Name']
-                state = True if rsp['Devices'][dev]['DeviceValues']['1']['Value'].lower() == "true" else False
+                name = rsp["Devices"][dev]["Data"]["Name"]
+                state = (
+                    True
+                    if rsp["Devices"][dev]["DeviceValues"]["1"]["Value"].lower()
+                    == "true"
+                    else False
+                )
                 devices[dev] = {"name": name, "state": state}
 
         return devices
@@ -70,8 +79,8 @@ class securifi_almond():
         devs = self.__get_switches()
         for sw in self._switches:
             id = sw.get_devid()
-            sw.set_name(devs[id]['name'])
-            sw.set_state(devs[id]['state'])
+            sw.set_name(devs[id]["name"])
+            sw.set_state(devs[id]["state"])
 
     class api_comm:
         DEFAULT_PORT = 7681
@@ -86,7 +95,16 @@ class securifi_almond():
             self._ws = None
 
         def open_conn(self):
-            url = "ws://" + self._host + ":" + str(self._port) + "/" + self._user + "/" + self._pwd
+            url = (
+                "ws://"
+                + self._host
+                + ":"
+                + str(self._port)
+                + "/"
+                + self._user
+                + "/"
+                + self._pwd
+            )
             _LOGGER.debug("open_conn: " + url)
             self._ws = create_connection(url)
             result = self._ws.recv()
@@ -95,12 +113,11 @@ class securifi_almond():
                 self._ws = None
                 return False
             rsp = eval(result)
-            if rsp['CommandType'] != "DynamicAlmondModeUpdated":
+            if rsp["CommandType"] != "DynamicAlmondModeUpdated":
                 _LOGGER.error("Unexpected server response from connection")
                 self._ws = None
                 return False
             return True
-
 
         def close_conn(self):
             _LOGGER.debug("close_conn")
@@ -109,7 +126,6 @@ class securifi_almond():
                 return False
             self._ws.close()
             return True
-
 
         def send_cmd(self, mii, cmd, devid=None, idx=None, val=None):
             _LOGGER.debug("send_cmd: " + mii + "::" + cmd)
@@ -138,10 +154,9 @@ class securifi_almond():
                 _LOGGER.error("Invalid results")
                 return
             rsp = eval(result)
-            if rsp['CommandType'] != cmd or rsp['MobileInternalIndex'] != mii:
+            if rsp["CommandType"] != cmd or rsp["MobileInternalIndex"] != mii:
                 _LOGGER.error("Request and response mismatches")
             return rsp
-
 
         def update_device(self, devid, idx, val=False):
             _LOGGER.debug("update_device: " + devid + "::" + idx + "::" + str(val))
@@ -154,8 +169,7 @@ class securifi_almond():
             self.open_conn()
             rsp = self.send_cmd("1234", "UpdateDeviceIndex", devid, idx, str(val))
             self.close_conn()
-            return True if rsp['Success'].lower() == "true" else False
-
+            return True if rsp["Success"].lower() == "true" else False
 
     class switch:
         def __init__(self, api_comm, devid, name, state):
@@ -163,10 +177,17 @@ class securifi_almond():
             self._devid = devid
             self._name = name
             self._state = state
-            self._idx = "1" # property index 1 is always the on/off for switches
+            self._idx = "1"  # property index 1 is always the on/off for switches
 
         def print_attrib(self):
-            _LOGGER.debug("devid::"+self._devid+", name::"+self._name+", state::"+str(self._state))
+            _LOGGER.debug(
+                "devid::"
+                + self._devid
+                + ", name::"
+                + self._name
+                + ", state::"
+                + str(self._state)
+            )
 
         def get_devid(self):
             return self._devid
@@ -190,7 +211,8 @@ class securifi_almond():
 
         def turn_off(self):
             self._api_comm.update_device(self._devid, self._idx, False)
-    
+
+
 def main():
     almond = securifi_almond("192.168.1.101", "third62")
     sw_objs = almond.get_switches()
@@ -220,6 +242,7 @@ def main():
     almond.refresh_switches()
     for sw in sw_objs:
         sw.print_attrib()
+
 
 if __name__ == "__main__":
     main()
